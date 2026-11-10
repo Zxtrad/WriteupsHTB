@@ -90,6 +90,7 @@ ahora observare com `ss -tulpn` para ver los servicios y aplicaciones y noto que
 
 activo un autossh para poder ingresar al OliveTin mediante la web, observo la version `OliveTin 3000.10.0` que es vulnerable  a  CVE-2026-27626
 
-Utilizo el Exploit publico de https://github.com/0xh7ml/CVE-2026-27626-PoC y consigo acceso a root
+Utilizo el Exploit publico de https://github.com/0xh7ml/CVE-2026-27626-PoC, consigo acceso a root y obtengo la flag
 
 ![](_attachment/Pasted%20image%2020261110175456.png)
+
