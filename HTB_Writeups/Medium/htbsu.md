@@ -10,7 +10,7 @@ Como costumbre, primero inicio con un escaneo nmap para ver los puertos abiertos
 
 El puerto 5985 llama mi atencion asi que le hago un mejor scan 
 
-![](attachment/Pasted%20image%2020261112192853.png)
+![](_attachment/Pasted%20image%2020261112192853.png)
 
 - esto puede indicar que esta corriendo WinRM
 
@@ -18,7 +18,7 @@ El puerto 5985 llama mi atencion asi que le hago un mejor scan
 
 `$ nxc smb [IP Destino]` para que nos muestre el banner, dominio, hostname y si esta activo
 
-![](attachment/dasdasdasdasdas.png)
+![](_attachment/dasdasdasdasdas.png)
 
 `signing:True` → confirma lo que no hay relay posible.
 
