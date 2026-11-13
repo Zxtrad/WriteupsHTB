@@ -128,7 +128,7 @@ podemos escalar privilegios via SeBackupPrivilege, pero la contraseña de este u
 
 # WinRM 
 
-lo primero sea comprobar si el usuario es valido
+lo primero es comprobar si el usuario es valido
 
 ![](_attachment/Pasted%20image%2020261112235214.png)
 
@@ -141,7 +141,7 @@ entonces con evil-winrm vamos a ingresar y confirmar los privilegios
 El truco es que `robocopy` con el flag `/B` usa las APIs de Backup de Windows, que permiten saltarse los chequeos normales de ACL de NTFS.
 
 - Payload:`robocopy /B C:\Users\Administrator\Desktop C:\Users\svc_wtbackup\Documents root.txt`
-- 
+
 Una vez copiado, solo queda ver el contenido
 
 ![](_attachment/Pasted%20image%2020261113001201.png)
